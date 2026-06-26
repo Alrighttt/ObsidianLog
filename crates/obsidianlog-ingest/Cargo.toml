@@ -1,0 +1,21 @@
+[package]
+name = "obsidianlog-ingest"
+description = "ObsidianLog HTTP ingest service: a Vector-compatible endpoint that drives log batches through the obsidianlog-store pipeline into Sia."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords = ["logging", "sia", "vector", "ingest", "http"]
+categories = ["network-programming"]
+
+[dependencies]
+obsidianlog-store.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# HTTP server for the Vector-compatible `/ingest` endpoint and its runtime.
+axum = "0.8.9"
+tokio = { version = "1.52.3", features = ["rt-multi-thread", "net", "macros", "signal"] }

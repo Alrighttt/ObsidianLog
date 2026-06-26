@@ -1,0 +1,17 @@
+[package]
+name = "obsidianlog-core"
+description = "ObsidianLog core vocabulary: shared domain types, the canonical error, and the StorageBackend trait. Pure — no I/O, no crypto, no Sia/indexd code."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords = ["logging", "archival", "sia", "storage", "types"]
+categories = ["data-structures"]
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true

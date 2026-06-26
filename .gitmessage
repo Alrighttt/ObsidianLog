@@ -1,0 +1,19 @@
+# <type>(<scope>): <description>   <-- ~50 chars, imperative mood, no trailing period
+#
+# [optional body: explain WHAT and WHY, wrapped ~72 cols]
+#
+# [optional footer: BREAKING CHANGE: ...  /  Refs: #123  /  Closes: #123]
+#
+# ── Conventional Commits (https://www.conventionalcommits.org) ───────────────
+# type:   feat | fix | docs | refactor | perf | test | build | ci | chore | revert
+# scope:  store | ingest | cli | deps | release   (optional; omit for repo-wide)
+# break:  add `!` before the colon and/or a `BREAKING CHANGE:` footer
+#
+# Examples:
+#   feat(store): add zstd compression to the pipeline
+#   fix(ingest): reject malformed Vector batches instead of panicking
+#   docs(adr): record the async vs sync StorageBackend decision
+#   ci: add the cross-platform test matrix
+#   feat(store)!: change on-Sia chunk framing
+#
+# Enable once with:  git config commit.template .gitmessage

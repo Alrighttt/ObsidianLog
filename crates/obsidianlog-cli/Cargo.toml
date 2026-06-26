@@ -1,0 +1,29 @@
+[package]
+name = "obsidianlog-cli"
+description = "Long-term, tamper-evident operational log archival on Sia: client-side encrypted, zstd-compressed, hash-chained, and queryable. CLI with query, verify, and an interactive setup wizard. Installs the `obsidianlog` binary."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation = "https://docs.rs/obsidianlog"
+readme = "README.md"
+keywords = ["logging", "archival", "sia", "observability", "cli"]
+categories = ["command-line-utilities"]
+default-run = "obsidianlog"
+
+[[bin]]
+name = "obsidianlog"
+path = "src/main.rs"
+
+[dependencies]
+obsidianlog-store.workspace = true
+obsidianlog-ingest.workspace = true
+clap.workspace = true
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# OS keychain for the user-generated encryption key created by `obsidianlog init`.
+keyring = "4.1.2"

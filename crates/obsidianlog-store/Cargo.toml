@@ -1,0 +1,33 @@
+[package]
+name = "obsidianlog-store"
+description = "ObsidianLog core storage library: zstd compression, AES-256-GCM encryption, SHA-256 hash chaining, and append-only chunking over a pluggable Sia/indexd backend."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords = ["logging", "archival", "sia", "encryption", "compression"]
+categories = ["cryptography", "filesystem"]
+
+[dependencies]
+# Shared vocabulary (Error/Result, StorageBackend trait, domain types).
+obsidianlog-core.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# Pipeline primitives named in the architecture. Kept here so the storage layer
+# owns its cryptographic surface; the implementer wires these into the stubs.
+zstd = "0.13.3"
+aes-gcm = "0.10.3"
+sha2 = "0.11.0"
+
+[features]
+# Default builds and tests run entirely against the in-process `LocalBackend`
+# with NO Sia node — this is the mock-first invariant (see CLAUDE.md / ADR-0004).
+default = []
+# Enables the real Sia integration (`backend::SiaBackend`). The pre-1.0 Sia SDK
+# (`sia_storage`) is wired in here, behind this feature, so default builds never
+# depend on it. Keep the SDK confined to `src/backend/sia.rs`.
+sia = []

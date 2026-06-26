@@ -1,0 +1,6 @@
+# Pin the toolchain channel and ensure the components CI relies on are present
+# for every contributor. Bump deliberately rather than letting it drift.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

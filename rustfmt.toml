@@ -1,0 +1,3 @@
+# Stable-only rustfmt settings shared across the workspace.
+edition = "2024"
+max_width = 100

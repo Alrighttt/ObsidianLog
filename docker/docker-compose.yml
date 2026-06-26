@@ -1,0 +1,38 @@
+# Containerized quickstart: indexd + ObsidianLog ingest, side by side.
+#
+# This is the alternative onboarding path from the proposal's "onboarding
+# friction" mitigation. Point Vector's HTTP sink at http://localhost:7080/ingest.
+#
+#   docker compose -f docker/docker-compose.yml up
+#
+# NOTE (scaffold): the indexd service below is a placeholder. Pin the official
+# indexd image and its required configuration/wallet setup once finalized — see
+# docs/adr for the storage decisions this depends on.
+
+services:
+  indexd:
+    # TODO(impl): replace with the official indexd image + config once finalized.
+    image: ghcr.io/siafoundation/indexd:latest
+    restart: unless-stopped
+    ports:
+      - "9980:9980"
+    volumes:
+      - indexd-data:/data
+
+  obsidianlog:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - indexd
+    ports:
+      - "7080:7080"
+    environment:
+      # The CLI reads its config from here; mount a real config in `./config`.
+      OBSIDIANLOG_CONFIG: /etc/obsidianlog/config.json
+    volumes:
+      - ./config:/etc/obsidianlog:ro
+    command: ["ingest", "--bind", "0.0.0.0:7080"]
+
+volumes:
+  indexd-data:
