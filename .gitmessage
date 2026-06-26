@@ -6,7 +6,7 @@
 #
 # ── Conventional Commits (https://www.conventionalcommits.org) ───────────────
 # type:   feat | fix | docs | refactor | perf | test | build | ci | chore | revert
-# scope:  store | ingest | cli | deps | release   (optional; omit for repo-wide)
+# scope:  core | store | ingest | cli | deps | release   (optional; omit for repo-wide)
 # break:  add `!` before the colon and/or a `BREAKING CHANGE:` footer
 #
 # Examples:

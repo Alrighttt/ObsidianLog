@@ -112,9 +112,9 @@ Format:
 | `chore` | maintenance with no source change |
 | `revert` | reverting a previous commit |
 
-**Scopes** name the affected crate, or a repo-wide area: `store`, `ingest`,
-`cli`, `deps`, `release`. Scope is optional — omit it for changes that don't
-belong to a single crate (e.g. `ci: ...`).
+**Scopes** name the affected crate, or a repo-wide area: `core`, `store`,
+`ingest`, `cli`, `deps`, `release`. Scope is optional — omit it for changes that
+don't belong to a single crate (e.g. `ci: ...`).
 
 **Breaking changes** add a `!` before the colon and/or a `BREAKING CHANGE:`
 footer:
