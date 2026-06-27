@@ -29,6 +29,15 @@ Milestones follow the proposal's monthly plan (see the README roadmap):
 | 1: Core storage + ingest | _`LocalBackend` (filesystem) — unblocks Sia-free tests_ | _pending_ | Makes `tests/pipeline.rs` runnable. |
 | 1: Core storage + ingest | _HTTP ingest server (`/ingest`, `/health`)_ | _pending_ | |
 
+## Security practices followed
+
+The Foundation's "Security best practices followed" checklist item is satisfied
+by the practices documented in [`SECURITY.md`](../../SECURITY.md): client-side
+encryption only, user-controlled keys (OS keychain / `0600` file, no escrow or
+transmission), AES-256-GCM authenticated encryption, an append-only +
+hash-chained tamper-evident storage model, no intermediary in the storage path,
+and `cargo audit` dependency auditing in CI.
+
 ## How to update
 
 When a task's PR merges (or, for early work, a commit lands):
