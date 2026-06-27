@@ -133,9 +133,17 @@ cargo build -p obsidianlog-store --features sia   # opt in to the Sia backend
 
 ## Roadmap
 
-- **Month 1** — core storage library + HTTP ingest server
-- **Month 2** — query tooling, `obsidianlog init` wizard, cross-platform binaries
-- **Month 3** — reusable GitHub Actions workflow, docs site, live demo
+Grant milestones (task-by-task progress in
+[`docs/grant/PROGRESS.md`](docs/grant/PROGRESS.md)):
+
+- **Month 1 — Core Storage & Ingestion** (due 2026-07-25): `obsidianlog-store`
+  and `obsidianlog-ingest`, integration tests + CI, finalized storage ADRs.
+- **Month 2 — Query Tooling & Developer Experience** (due 2026-08-25): CLI query
+  interface and `verify`, the `obsidianlog init` wizard, cross-platform binaries,
+  Docker Compose quickstart.
+- **Month 3 — Launch & Ecosystem Integration** (due 2026-09-25): reusable GitHub
+  Actions workflow, documentation site, live demo, Grafana/SIEM integrations, and
+  public launch.
 
 ## License
 

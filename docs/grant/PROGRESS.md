@@ -1,33 +1,99 @@
 # Grant progress — ObsidianLog
 
-Monthly progress reports for the Sia Foundation grant. Each milestone's tasks are
-listed with the pull request(s) — or commit(s) — that implement them, following
-the Foundation's Grants Development Guide.
+Development tracker for the Sia Foundation grant: each milestone's deliverables,
+broken into tasks, with the pull request(s) — or commit(s) — that implement them,
+following the Foundation's Grants Development Guide.
+
+> **Canonical source.** The approved goals, deliverables, and success criteria
+> live in the grant proposal on the **Sia Foundation forum** (the source of
+> truth). This file is the in-repo development tracker; the milestone summaries
+> below mirror the proposal for convenience.
 
 > **Reporting note.** Early scaffolding work predates the project's switch to a
 > PR-based flow, so those rows link **commits** rather than PRs (permitted for
 > pre-existing grants by the guide's caveat). Every task from here on lands as a
-> pull request and links the PR number.
+> pull request and links the PR number. At month end, the completed rows for that
+> month's milestone are the report submitted to the forum.
 
-## Milestones
+## Goal
 
-Milestones follow the proposal's monthly plan (see the README roadmap):
+The MVP answers one core question: **can real logs flow from a production-grade
+log agent into Sia — encrypted, compressed, and tamper-proof — and be retrieved
+accurately through a query interface?** Everything beyond that is deferred to
+Phase 2.
 
-- **Milestone 1 — Core storage library + HTTP ingest server**
-- **Milestone 2 — Query tooling, `obsidianlog init` wizard, cross-platform binaries**
-- **Milestone 3 — Reusable GitHub Actions workflow, docs site, live demo**
+## Timeline
 
-## Progress report
+| Milestone | Theme | Due |
+| --- | --- | --- |
+| Month 1 | Core Storage & Ingestion | 2026-07-25 |
+| Month 2 | Query Tooling & Developer Experience | 2026-08-25 |
+| Month 3 | Launch & Ecosystem Integration | 2026-09-25 |
 
-| Milestone | Task | Pull Request(s) / Commit(s) | Additional Notes |
-| --- | --- | --- | --- |
-| 1: Core storage + ingest | Workspace scaffold: 4 crates (core/store/ingest/cli), mock-first backends, CI, ADRs, docs | `3ceb7ca` | Pre-PR scaffolding (commit-linked per caveat). Pipeline is stubbed with `todo!()`; not yet functional. |
-| 1: Core storage + ingest | Commit-convention docs — add `core` scope | `132c0c3` | |
-| 1: Core storage + ingest | _zstd compression (`compression::{compress,decompress}`)_ | _pending_ | |
-| 1: Core storage + ingest | _AES-256-GCM encryption + deterministic nonces_ | _pending_ | Implements ADR-0002. |
-| 1: Core storage + ingest | _SHA-256 per-service hash chaining + manifest_ | _pending_ | Implements ADR-0003. |
-| 1: Core storage + ingest | _`LocalBackend` (filesystem) — unblocks Sia-free tests_ | _pending_ | Makes `tests/pipeline.rs` runnable. |
-| 1: Core storage + ingest | _HTTP ingest server (`/ingest`, `/health`)_ | _pending_ | |
+## Foundational setup (pre-milestone)
+
+Project scaffolding and process setup, completed before milestone task work.
+Commit-linked (pre-PR), per the pre-existing-grant caveat.
+
+| Task | Commit(s) | Notes |
+| --- | --- | --- |
+| Workspace scaffold: 4 crates (core/store/ingest/cli), mock-first backends, CI, ADRs | `3ceb7ca` | Pipeline stubbed with `todo!()`; not yet functional. |
+| Commit-convention docs (add `core` scope) | `132c0c3` | |
+| Sia grant workflow + progress tracking | `969a293` | |
+| Security practices documentation | `0ae9c05` | |
+
+## Month 1 — Core Storage & Ingestion (due 2026-07-25)
+
+**Goal:** Build the production core storage library and production-ready HTTP
+ingest server.
+
+| Deliverable / task | Pull Request(s) / Commit(s) | Status / Notes |
+| --- | --- | --- |
+| `obsidianlog-store`: zstd compression | _pending_ | |
+| `obsidianlog-store`: AES-256-GCM encryption + deterministic nonces | _pending_ | Implements ADR-0002. |
+| `obsidianlog-store`: SHA-256 per-service hash chaining + manifest | _pending_ | Implements ADR-0003. |
+| `obsidianlog-store`: chunking + `LocalBackend` (Sia-free) | _pending_ | Unblocks the pipeline integration tests. |
+| `obsidianlog-ingest`: Vector-compatible HTTP ingest server (`/ingest`, `/health`) | _pending_ | |
+| Integration test suite with CI | _in progress_ | CI green (`3ceb7ca`); pipeline/ingest tests scaffolded and `#[ignore]`d until logic lands. |
+| ADR documenting finalized storage decisions | _done_ | `3ceb7ca` — ADR-0002 (nonces), ADR-0003 (chains), ADR-0004 (layout). |
+| Month 1 progress report submitted to the Sia Foundation forum | _pending_ | Due 2026-07-25. |
+
+## Month 2 — Query Tooling & Developer Experience (due 2026-08-25)
+
+**Goal:** Build retrieval tooling, query interface, and onboarding experience.
+
+| Deliverable / task | Pull Request(s) / Commit(s) | Status / Notes |
+| --- | --- | --- |
+| `obsidianlog` CLI query interface | _pending_ | CLI arg surface scaffolded in `cli.rs`. |
+| Hash-chain verification tooling (`obsidianlog verify`) | _pending_ | |
+| `obsidianlog init` setup wizard | _pending_ | Target: < 15 min on a clean machine. |
+| Cross-platform binaries (Linux, macOS, Windows) | _pending_ | `release.yml` workflow scaffolded. |
+| Docker Compose quickstart | _pending_ | `docker/` scaffolded. |
+| Month 2 progress report submitted to the Sia Foundation forum | _pending_ | Due 2026-08-25. |
+
+## Month 3 — Launch & Ecosystem Integration (due 2026-09-25)
+
+**Goal:** Ship public developer tooling, integrations, and launch materials.
+
+| Deliverable / task | Pull Request(s) / Commit(s) | Status / Notes |
+| --- | --- | --- |
+| GitHub Actions reusable workflow | _pending_ | Must be publicly available and forkable. |
+| Documentation site | _pending_ | |
+| Live end-to-end demo | _pending_ | |
+| Example integrations: Grafana + SIEM export workflows | _pending_ | |
+| Final MVP report (usage metrics + developer feedback) | _pending_ | |
+| Public launch | _pending_ | |
+
+## Success criteria (by end of Month 3)
+
+- Logs flow from Vector to Sia end-to-end, typically within 60 seconds from setup
+  completion under normal conditions.
+- Archived logs are retrievable via CLI with correct filtering and intact content.
+- `obsidianlog verify` hash-chain check passes on all stored chunks.
+- `obsidianlog init` completes in under 15 minutes on a clean machine.
+- The GitHub Actions demo is publicly available and forkable.
+- At least 10 external developers have tested the tool and provided feedback
+  (outreach: Sia Discord, developer communities, the Vector community Slack).
 
 ## Security practices followed
 
@@ -42,9 +108,9 @@ and `cargo audit` dependency auditing in CI.
 
 When a task's PR merges (or, for early work, a commit lands):
 
-1. Add a row: the milestone, the task, a link to the PR (`#123`) or commit (short
-   SHA), and any notes (difficulties, partial completion, follow-ups).
-2. Remove the leading `_italics_`/`_pending_` once a planned task is done.
+1. Fill its row: a link to the PR (`#123`) or commit (short SHA), and any notes
+   (difficulties, partial completion, follow-ups).
+2. Change `_pending_` / `_in progress_` to `_done_` once complete.
 
 At month end, the completed rows for that month's milestone are the report
-submitted to the Foundation.
+submitted to the Sia Foundation forum.
