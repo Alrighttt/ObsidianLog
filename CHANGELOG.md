@@ -39,5 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Community health files: Code of Conduct (Contributor Covenant 2.1), issue
   forms (bug/feature) with a contact-links config, a pull-request template, a
   Dependabot config (cargo + GitHub Actions), and an `.editorconfig`.
+- Sia Foundation grant workflow: an architecture overview (diagram) in the
+  README, a monthly progress report (`docs/grant/PROGRESS.md`), and a
+  pull-request template that asks for testing instructions and remaining-work
+  notes, per the Foundation's Grants Development Guide.
 
 [Unreleased]: https://github.com/emmaglorypraise/ObsidianLog/commits/main

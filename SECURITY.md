@@ -32,6 +32,6 @@ selection, and the user's operational key-management practices.
 ## Dependency hygiene
 
 The dependency tree is audited against the RustSec advisory database via
-`cargo audit` in CI (see `.github/workflows/audit.yml`). Critical dependencies
+`cargo audit` in CI (the `audit` job in `.github/workflows/ci.yml`). Critical dependencies
 (`zstd`, `aes-gcm`, `sha2`) are maintained by the RustCrypto and zstd-rs
 communities.

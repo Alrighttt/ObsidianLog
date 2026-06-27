@@ -54,6 +54,32 @@ A lightweight metadata index (under 1% of log size) is queried first, so full
 chunks are fetched and decrypted only when they actually match. Storage and
 retrieval are coordinated through [indexd](https://sia.tech).
 
+## Architecture
+
+Logs flow from Vector into the ingest server, through the deterministic storage
+pipeline, and out to a pluggable backend. The CLI reads back through the same
+backend, hitting the metadata index before fetching chunks. The `StorageBackend`
+trait (in `obsidianlog-core`) is the seam that keeps the Sia integration optional.
+
+```mermaid
+flowchart TD
+    V["Vector (HTTP sink)"] -->|"POST /ingest"| ING["obsidianlog-ingest<br/>(axum HTTP server)"]
+    ING --> PIPE["obsidianlog-store pipeline<br/>parse → zstd → AES-256-GCM → SHA-256 chain → chunk"]
+    CLI["obsidianlog-cli<br/>query / verify"] --> PIPE
+    PIPE -->|"StorageBackend trait<br/>(obsidianlog-core)"| BK{"Backend"}
+    BK --> LOCAL["LocalBackend<br/>(filesystem, default — no Sia)"]
+    BK -->|"sia feature"| SIA["SiaBackend → indexd → Sia network"]
+```
+
+- **Client / ingestion:** Vector posts JSON log batches to `obsidianlog-ingest`
+  (HTTP); the `obsidianlog` CLI drives `query`/`verify` directly.
+- **Processing:** `obsidianlog-store` runs the pipeline and owns the crypto.
+- **Storage:** the `StorageBackend` trait abstracts durable storage —
+  `LocalBackend` (default, no network) or `SiaBackend` (the `sia` feature) via
+  the user's `indexd` on the Sia network.
+- **Keys/secrets:** generated locally, stored in the OS keychain or a `0600`
+  file — never transmitted, never committed.
+
 ## Repository layout
 
 This is a Cargo workspace of four crates:
