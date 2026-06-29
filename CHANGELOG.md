@@ -43,5 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   README, a monthly progress report (`docs/grant/PROGRESS.md`), and a
   pull-request template that asks for testing instructions and remaining-work
   notes, per the Foundation's Grants Development Guide.
+- `obsidianlog-core` data model: `LogRecord`/`LogBatch`, `ChunkHeader`/`Chunk`
+  (with a canonical, golden-tested hashing layout), `ChunkRef`,
+  `ServiceWindowIndex`, `ManifestServiceChain`/`Manifest`, and a restructured
+  `Error`. The `StorageBackend` trait is now async (`async-trait`) with
+  chunk/index/manifest methods and a documented durability contract. See
+  ADR-0005.
 
 [Unreleased]: https://github.com/emmaglorypraise/ObsidianLog/commits/main

@@ -10,8 +10,12 @@
 //! Storage and retrieval are coordinated on the Sia network through the user's
 //! `indexd` deployment; this backend abstracts away contract formation.
 
-use obsidianlog_core::backend::StorageBackend;
+use async_trait::async_trait;
+use obsidianlog_core::backend::{StorageBackend, TimeRange};
+use obsidianlog_core::chunk::{Chunk, ChunkRef};
 use obsidianlog_core::error::Result;
+use obsidianlog_core::index::ServiceWindowIndex;
+use obsidianlog_core::manifest::Manifest;
 
 /// Connection settings for a Sia `indexd` deployment.
 #[derive(Debug, Clone)]
@@ -40,24 +44,39 @@ impl SiaBackend {
     }
 }
 
+#[async_trait]
 impl StorageBackend for SiaBackend {
-    fn put(&self, path: &str, bytes: &[u8]) -> Result<()> {
-        let _ = (path, bytes);
-        todo!("write an append-only object to Sia via indexd")
+    async fn put_chunk(&self, chunk: &Chunk) -> Result<()> {
+        let _ = chunk;
+        todo!("durably write a chunk to Sia via indexd")
     }
 
-    fn get(&self, path: &str) -> Result<Vec<u8>> {
-        let _ = path;
-        todo!("read an object from Sia via indexd")
+    async fn get_chunk(&self, service: &str, window: &str) -> Result<Chunk> {
+        let _ = (service, window);
+        todo!("read a chunk from Sia via indexd")
     }
 
-    fn list(&self, prefix: &str) -> Result<Vec<String>> {
-        let _ = prefix;
-        todo!("list objects under a prefix via indexd")
+    async fn put_index(&self, index: &ServiceWindowIndex) -> Result<()> {
+        let _ = index;
+        todo!("durably write a service-window index to Sia via indexd")
     }
 
-    fn exists(&self, path: &str) -> Result<bool> {
-        let _ = path;
-        todo!("check object existence via indexd")
+    async fn get_index(&self, service: &str, window: &str) -> Result<ServiceWindowIndex> {
+        let _ = (service, window);
+        todo!("read a service-window index from Sia via indexd")
+    }
+
+    async fn list_chunks(&self, service: &str, range: Option<TimeRange>) -> Result<Vec<ChunkRef>> {
+        let _ = (service, range);
+        todo!("list chunk references via indexd")
+    }
+
+    async fn read_manifest(&self) -> Result<Manifest> {
+        todo!("read the manifest from Sia via indexd")
+    }
+
+    async fn write_manifest(&self, manifest: &Manifest) -> Result<()> {
+        let _ = manifest;
+        todo!("durably write the manifest to Sia via indexd")
     }
 }

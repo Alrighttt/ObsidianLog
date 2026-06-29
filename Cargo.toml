@@ -34,6 +34,10 @@ thiserror = "2.0.18"
 clap = { version = "4.6.1", features = ["derive"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
+# Timestamps in the data model (DateTime<Utc>), with serde support.
+chrono = { version = "0.4.39", default-features = false, features = ["serde", "std"] }
+# Async methods on the StorageBackend trait (boxed, Send futures; object-safe).
+async-trait = "0.1.88"
 
 # Slimmer, faster release binaries for the cross-platform distribution targets.
 [profile.release]

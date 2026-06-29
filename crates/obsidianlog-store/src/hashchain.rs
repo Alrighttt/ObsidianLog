@@ -25,7 +25,7 @@ pub fn hash_chunk(chunk_bytes: &[u8]) -> ChunkHash {
 /// Verify that `chunk` correctly chains onto `prev_hash` (within one service's chain).
 ///
 /// TODO(impl): recompute the expected link and compare; return
-/// [`obsidianlog_core::Error::Integrity`] on mismatch.
+/// [`obsidianlog_core::Error::ChainIntegrity`] on mismatch.
 pub fn verify_link(prev_hash: &ChunkHash, chunk: &[u8]) -> Result<()> {
     let _ = (prev_hash, chunk);
     todo!("verify a single hash-chain link")

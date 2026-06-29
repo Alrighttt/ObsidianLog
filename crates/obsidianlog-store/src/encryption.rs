@@ -44,7 +44,7 @@ pub fn encrypt(plaintext: &[u8], key: &Key, nonce: &[u8; NONCE_LEN]) -> Result<V
 /// Authenticated-decrypt a framed chunk with AES-256-GCM.
 ///
 /// TODO(impl): split the `nonce || ciphertext || tag` framing, verify the GCM
-/// tag, and return plaintext (or [`obsidianlog_core::Error::Encryption`] on tag
+/// tag, and return plaintext (or [`obsidianlog_core::Error::Crypto`] on tag
 /// mismatch).
 pub fn decrypt(framed: &[u8], key: &Key) -> Result<Vec<u8>> {
     let _ = (framed, key);
