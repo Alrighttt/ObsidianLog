@@ -13,6 +13,7 @@ We follow the lightweight [Michael Nygard format](https://cognitect.com/blog/201
 - [0002 — Deterministic AES-GCM nonce derivation](0002-aes-gcm-nonce-derivation.md)
 - [0003 — Per-service hash chains](0003-per-service-hash-chains.md)
 - [0004 — Workspace layout and storage abstraction](0004-workspace-layout-and-storage-abstraction.md)
+- [0005 — Storage data model](0005-storage-data-model.md)
 
 ## Adding an ADR
 

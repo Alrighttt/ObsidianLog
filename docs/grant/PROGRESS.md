@@ -49,6 +49,7 @@ ingest server.
 
 | Deliverable / task | Pull Request(s) / Commit(s) | Status / Notes |
 | --- | --- | --- |
+| `obsidianlog-core`: data model + async `StorageBackend` trait | this PR | Foundation for the storage library. Canonical hashing layout + per-service chains; ADR-0005. |
 | `obsidianlog-store`: zstd compression | _pending_ | |
 | `obsidianlog-store`: AES-256-GCM encryption + deterministic nonces | _pending_ | Implements ADR-0002. |
 | `obsidianlog-store`: SHA-256 per-service hash chaining + manifest | _pending_ | Implements ADR-0003. |
