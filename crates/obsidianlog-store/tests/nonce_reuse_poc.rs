@@ -1,21 +1,19 @@
-//! PROOF-OF-CONCEPT: a latent footgun in ObsidianLog's use of AES-256-GCM.
+//! PROOF-OF-CONCEPT: a latent footgun in this crate's use of AES-256-GCM.
 //!
-//! Security-review finding **F1 (critical, latent)**. This test does not assert
-//! that the code is correct — it *demonstrates the footgun*, and passes **while
-//! it exists**. If the nonce scheme is fixed, these tests start to fail, so they
-//! also serve as a fix-verification.
+//! This test does not assert that the code is correct — it *demonstrates the
+//! footgun*, and passes **while it exists**. If the nonce scheme is fixed, these
+//! tests start to fail, so they also serve as a fix-verification.
 //!
 //! Run with:  `cargo test -p obsidianlog-store --test nonce_reuse_poc -- --nocapture`
 //!
 //! ## The footgun
 //!
 //! AES-256-GCM has one non-negotiable rule: a `(key, nonce)` pair must **never**
-//! repeat. A single repeat is catastrophic, and the project's own ADR-0002 says
-//! exactly this. Yet the way the pieces are wired together makes a repeat
-//! reachable:
+//! repeat; a single repeat is catastrophic. Yet the way the pieces here are
+//! wired together makes a repeat reachable:
 //!
 //! - the 96-bit nonce is derived deterministically as
-//!   `SHA-256(service)[..4] || sequence(8B BE)` ([`obsidianlog_store::encrypt`]);
+//!   `SHA-256(service)[..4] || sequence(8B BE)`;
 //! - `ArchiveEngine` encrypts **every** service under **one** shared
 //!   `EncryptionKey`; and
 //! - every service's chain starts at sequence 0.
@@ -34,26 +32,34 @@
 //!
 //! ## Why "latent"
 //!
-//! The scheme is safe only under an **unstated, unenforced** assumption: that
-//! every writer of a `service` value is trusted *and* the service count stays
-//! small (well below ~10^4). Under that assumption — today's single-tenant,
-//! loopback MVP — an accidental collision is negligible and the attacker-chosen
-//! path does not apply; the issue is moot anyway while encryption runs on the
-//! all-zero default key. But nothing documents or enforces that assumption
-//! (ingest is unauthenticated and does not warn when bound off-loopback), it is
-//! contradicted by the project's own Month-3 hosted, multi-tenant roadmap (where
-//! service names are adversarial), and ADR-0002's claim of "zero collision
-//! probability" is true only *within* a service. A primitive that fails
-//! catastrophically the moment a soft assumption is violated is a footgun, not a
-//! safe default.
+//! The flaw is contained to a **single key**: every service is encrypted under
+//! one shared `EncryptionKey`, so a collision only reuses a `(key, nonce)` pair
+//! among services that share that key. It is also moot while the engine is run
+//! with the all-zero default key, since that key is not secret. It becomes a
+//! real exposure once a genuine secret key is in use, and the realistic triggers
+//! are, in order of likelihood:
+//!
+//! 1. **Sequence-counter reset** — if the persisted per-service counter is lost
+//!    or reset, a service restarts at sequence 0 and re-emits nonces it has
+//!    already used under the same key. No attacker, no scale, no collision
+//!    required.
+//! 2. **High service-name cardinality** under one key — an accidental birthday
+//!    collision (~50% near 2^16 distinct services; the `service` field is
+//!    unbounded and set from log data).
+//! 3. **An untrusted or injectable `service` value** combined with read access
+//!    to the stored ciphertext — e.g. a compromised log source or
+//!    attacker-influenced application data.
+//!
+//! The counter-based nonce is unique only *within* a single service, never
+//! across services. A primitive that fails catastrophically on an ordinary
+//! operational event like losing a counter is a footgun, not a safe default.
 //!
 //! ## The fix
 //!
-//! Make cross-service nonce uniqueness unconditional: put a manifest-assigned
-//! unique service id (not a truncated hash) in the nonce, or use a per-service
-//! HKDF subkey (the alternative already noted in ADR-0002); validate and
-//! normalize service names on ingest; and correct the "zero collision
-//! probability" claim in ADR-0002 and `encrypt.rs`.
+//! Make cross-service nonce uniqueness unconditional: put a per-service unique
+//! integer id (assigned once and stored, not a truncated hash of the name) into
+//! the nonce, or derive a distinct per-service subkey so no two services ever
+//! share a key; and validate/normalize service names before use.
 //!
 //! ## What the tests below show
 //!
@@ -134,7 +140,7 @@ fn nonce_collision_across_services_is_cheap_and_deterministic() {
     }
 
     eprintln!(
-        "[F1] distinct services {a:?} and {b:?} share AES-GCM nonce {:02x?}",
+        "[poc]distinct services {a:?} and {b:?} share AES-GCM nonce {:02x?}",
         derive_nonce(&a, 0)
     );
 }
@@ -176,7 +182,7 @@ fn shared_key_plus_colliding_nonce_leaks_victim_plaintext() {
         "victim plaintext recovered WITHOUT the key — (key,nonce) reuse broke confidentiality"
     );
     eprintln!(
-        "[F1] recovered victim plaintext without the key: {:?}",
+        "[poc]recovered victim plaintext without the key: {:?}",
         String::from_utf8_lossy(&recovered)
     );
 }
@@ -279,6 +285,6 @@ async fn cross_service_nonce_reuse_breaks_confidentiality_through_the_engine() {
         "recovered the victim service's secret log content with no encryption key"
     );
     eprintln!(
-        "[F1] recovered victim SECRET through the engine, without the key: {recovered_msg:?}"
+        "[poc]recovered victim SECRET through the engine, without the key: {recovered_msg:?}"
     );
 }
